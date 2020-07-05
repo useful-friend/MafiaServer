@@ -22,7 +22,7 @@ TRANSLATIONS += \
     M_fa_IR.ts
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
+QML_IMPORT_PATH = C:/Qt/5.12.6/mingw73_64/qml
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
