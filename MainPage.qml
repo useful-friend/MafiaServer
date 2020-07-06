@@ -3,7 +3,7 @@ import QtQuick.Controls 2.12
 
 Item {
     id: it
-    anchors.fill: parent
+    signal startRequested()
     StackView {
         width: parent.width
         anchors.bottom: myItem.top
@@ -16,11 +16,19 @@ Item {
             anchors.fill: parent
         }
     }
+    Button {
+        id: btn
+        text: "start server"
+        onClicked: {
+            it.startRequested()
+        }
+    }
+
     Item {
         id: myItem
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 5
-        width: backButton.width +  nextButton.width + 10
+        width: backButton.width +  nextButton.width + backButton.anchors.rightMargin + nextButton.anchors.leftMargin
         height: backButton.height
         anchors.horizontalCenter: parent.horizontalCenter
         Button {
