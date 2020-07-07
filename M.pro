@@ -1,4 +1,4 @@
-QT += quick virtualkeyboard network
+QT += quick virtualkeyboard network quickcontrols2
 
 CONFIG += c++11
 
@@ -15,6 +15,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
+        membermodel.cpp \
         serverhandler.cpp
 
 RESOURCES += qml.qrc
@@ -34,4 +35,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    membermodel.h \
     serverhandler.h

@@ -9,42 +9,48 @@ Window {
     visible: true
     width: 600
     height: 600
-    color: "#4c4e50"
+//    color: "#4c4e50"
     title: qsTr("Hello World")
+
+    Material.theme: Material.Dark
+    Material.accent: Material.DeepOrange
+
     Connections {
         target: ServerHandler
         onServerInitialized: {
-            loader.setSource("qrc:/Settings.qml")
-            busy.visible = false
+//            busy.visible = false
+            stack.push("qrc:/MemberSelection.qml", {}, StackView.Immediate)
         }
     }
 
-    Loader {
-        id: loader
+    StackView {
+        id: stack
         anchors.fill: parent
-        sourceComponent: MainPage {
+        initialItem: MainPage {
             id: mainPage
             anchors.fill: parent
-            onStartRequested: {
-                ServerHandler.startServer()
-                busy.visible = true
+            onOpenRoom: {
+                ServerHandler.startServer(roomName)
+//                busy.visible = true
             }
         }
     }
-    Menu {
+    Drawer {
+        id: drawer
+        width: 0.33 * window.width
+        height: window.height
 
-    }
-    Rectangle {
-        id: busy
-        visible: false
-        width: 64
-        height: 64
-        anchors.centerIn: parent
-        color: "cyan"
-        BusyIndicator {
-            anchors.fill: parent
+        Label {
+            text: "Content goes here!"
         }
     }
+//    BusyIndicator {
+//        visible: false
+//        width: 64
+//        height: 64
+//        anchors.centerIn: parent
+//        id: busy
+//    }
     InputPanel {
         id: inputPanel
         z: 99

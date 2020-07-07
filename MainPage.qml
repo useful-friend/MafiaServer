@@ -1,53 +1,56 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.12
+import QtQuick.Controls.Material 2.12
 
 Item {
-    id: it
-    signal startRequested()
-    StackView {
-        width: parent.width
-        anchors.bottom: myItem.top
-        anchors.top: parent.top
-        anchors.bottomMargin: 5
-        id: stack
-        initialItem: home
-        HomePage {
-            id: home
-            anchors.fill: parent
+    id: root
+    signal openRoom(string roomName)
+    Rectangle {
+        anchors.centerIn: parent
+        width: 200
+        height: textName.height + btn.height + 30
+        radius: 5
+        color: "darkgrey"
+        TextField {
+            id: textName
+            width: {
+                var min = contentWidth < 120 ? 120 : contentWidth;
+                return min < parent.width - 20 ? min : parent.width - 20
+            }
+            placeholderText: qsTr("Room name")
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 10
         }
-    }
-    Button {
-        id: btn
-        text: "start server"
-        onClicked: {
-            it.startRequested()
+        Dialog {
+            id: dig
+            Column{
+                Text {
+                    id: t
+                    text: qsTr("Please enter a room name")
+                }
+                Button {
+                    text: qsTr("OK")
+                    onClicked: dig.close()
+                }
+            }
+        }
+
+        Button {
+            id: btn
+            anchors.top: textName.bottom
+            anchors.topMargin: 10
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: "start server"
+            Material.foreground: Material.DeepOrange
+            Material.background: Material.Grey
+            onClicked: {
+                if (textName.length !== 0)
+                    root.openRoom(textName.text)
+                else
+                    dig.open()
+            }
         }
     }
 
-    Item {
-        id: myItem
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 5
-        width: backButton.width +  nextButton.width + backButton.anchors.rightMargin + nextButton.anchors.leftMargin
-        height: backButton.height
-        anchors.horizontalCenter: parent.horizontalCenter
-        Button {
-            id: backButton
-            width: 100
-            height: 50
-            anchors.right: nextButton.left
-            anchors.rightMargin: 5
-            text: "back"
-            onClicked: {stack.pop(StackView.Immediate)}
-        }
-        Button {
-            id: nextButton
-            width: 100
-            height: 50
-            anchors.left: backButton.right
-            anchors.leftMargin: 5
-            text: "next"
-            onClicked: {stack.push("qrc:/Settings.qml", {}, StackView.Immediate)}
-        }
-    }
 }

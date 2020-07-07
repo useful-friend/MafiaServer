@@ -4,5 +4,6 @@
         <file>MainPage.qml</file>
         <file>HomePage.qml</file>
         <file>Settings.qml</file>
+        <file>MemberSelection.qml</file>
     </qresource>
 </RCC>
