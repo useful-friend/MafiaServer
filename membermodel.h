@@ -31,10 +31,18 @@ class MemberModel : public QAbstractListModel
     Q_OBJECT
     QList<CustomSocket *> m_list;
 public:
+    enum Role {
+        NameRole = Qt::UserRole + 1,
+        PortRole,
+        IPRole
+    };
+    Q_ENUM(Role)
     explicit MemberModel(QObject *parent = nullptr);
+    void add(QTcpSocket *socket, const QString &name);
+
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
-    void add(QTcpSocket *socket, const QString &name);
+    QHash<int, QByteArray> roleNames() const override;
 };
 
 #endif // MEMBERMODEL_H

@@ -6,7 +6,6 @@
 
 MemberModel::MemberModel(QObject *parent) : QAbstractListModel(parent)
 {
-
 }
 
 int MemberModel::rowCount(const QModelIndex &parent) const
@@ -22,10 +21,23 @@ QVariant MemberModel::data(const QModelIndex &index, int role) const
     if (index.row() >= m_list.size())
         return QVariant();
     switch (role) {
-    case Qt::DisplayRole:
-        return "Name: " + m_list.at(index.row())->name() + ", IP: " + m_list.at(index.row())->socket()->localAddress().toString() + ", port: " + QString::number(m_list.at(index.row())->socket()->localPort());
+    case MemberModel::NameRole:
+        return m_list.at(index.row())->name();
+    case MemberModel::IPRole:
+        return m_list.at(index.row())->socket()->peerAddress().toString();
+    case MemberModel::PortRole:
+        return QString::number(m_list.at(index.row())->socket()->peerPort());
     }
     return QVariant();
+}
+
+QHash<int, QByteArray> MemberModel::roleNames() const
+{
+    QHash<int, QByteArray> r = QAbstractListModel::roleNames();
+    r[NameRole]     = "name";
+    r[IPRole]       = "ip";
+    r[PortRole]     = "port";
+    return r;
 }
 
 void MemberModel::add(QTcpSocket *socket, const QString &name)
