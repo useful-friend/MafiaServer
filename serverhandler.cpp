@@ -2,6 +2,7 @@
 #include "serverhandler.h"
 
 #include <QDebug>
+#include <QNetworkInterface>
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QUdpSocket>
@@ -15,10 +16,10 @@ ServerHandler::ServerHandler(QObject *parent) : QObject(parent)
 {
     m_model = new MemberModel(this);
     m_server = new QTcpServer(this);
-    m_udpSocket = new QUdpSocket(this);
-    m_udpSocket->bind(3000, QUdpSocket::ShareAddress);
+//    m_udpSocket = new QUdpSocket(this);
+//    m_udpSocket->bind(3000, QUdpSocket::ShareAddress);
     //QHostAddress(QHostAddress::Any), 3000
-    connect(m_udpSocket, &QUdpSocket::readyRead, this, &ServerHandler::onDatagramReceived);
+//    connect(m_udpSocket, &QUdpSocket::readyRead, this, &ServerHandler::onDatagramReceived);
     connect(m_server, &QTcpServer::newConnection, this, &ServerHandler::onNewConnection);
 }
 
@@ -26,8 +27,23 @@ void ServerHandler::startServer(const QString &roomName)
 {
     m_roomName = roomName;
     m_server->listen(QHostAddress::Any, 3000);
-    qDebug("server is listening");
-    emit serverInitialized();
+
+    QString ipAddress;
+    QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
+    // use the first non-localhost IPv4 address
+    for (int i = 0; i < ipAddressesList.size(); ++i) {
+        if (ipAddressesList.at(i) != QHostAddress::LocalHost &&
+                ipAddressesList.at(i).toIPv4Address()) {
+            ipAddress = ipAddressesList.at(i).toString();
+            break;
+        }
+    }
+    // if we did not find one, use IPv4 localhost
+    if (ipAddress.isEmpty())
+        ipAddress = QHostAddress(QHostAddress::LocalHost).toString();
+
+    qDebug() << "server is listening on" << ipAddress << 3000;
+    emit serverInitialized(ipAddress);
 }
 
 void ServerHandler::onNewConnection()
@@ -45,16 +61,16 @@ void ServerHandler::onNewConnection()
     m_model->add(socket, name);
 }
 
-void ServerHandler::onDatagramReceived()
-{
-    char data[64];
-    m_udpSocket->readDatagram(data, 64);
-    qDebug() << data;
-    if (QByteArray(data) == "hello") {
-        if (m_udpSocket->open(QIODevice::WriteOnly))
-            qDebug() << "sent" << m_udpSocket->writeDatagram(QString::number(m_udpSocket->peerAddress().toIPv4Address()).toLatin1(), m_udpSocket->peerAddress(), m_udpSocket->peerPort());
-        else
-            qDebug("not open");
-    }
-}
+//void ServerHandler::onDatagramReceived()
+//{
+//    char data[64];
+//    m_udpSocket->readDatagram(data, 64);
+//    qDebug() << data << m_udpSocket->localAddress().toString() << m_udpSocket->localPort();
+//    QByteArray ba(data);
+//    if (ba.left(5) == "hello") {
+//        QByteArray address = ba.remove(0, 6);
+//        qDebug() << address;
+//        QHostAddress(QString(address));
+//    }
+//}
 //m_udpSocket->write(m_udpSocket->peerAddress().toString() + "\n" + QString::number(m_udpSocket->peerPort()) + "\n");

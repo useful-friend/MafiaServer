@@ -1,4 +1,4 @@
-QT += quick virtualkeyboard network quickcontrols2
+QT += quick network quickcontrols2
 
 CONFIG += c++11
 

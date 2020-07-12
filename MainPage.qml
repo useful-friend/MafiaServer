@@ -4,7 +4,16 @@ import QtQuick.Controls.Material 2.12
 
 Item {
     id: root
+    focus: true
+
     signal openRoom(string roomName)
+    function openNewRoom() {
+        if (textName.length !== 0)
+            root.openRoom(textName.text)
+        else
+            dig.open()
+    }
+
     Rectangle {
         anchors.centerIn: parent
         width: 200
@@ -18,6 +27,7 @@ Item {
                 return min < parent.width - 20 ? min : parent.width - 20
             }
             placeholderText: qsTr("Room name")
+            text: qsTr("Room 1")
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
             anchors.topMargin: 10
@@ -44,13 +54,13 @@ Item {
             text: "start server"
             Material.foreground: Material.DeepOrange
             Material.background: Material.Grey
-            onClicked: {
-                if (textName.length !== 0)
-                    root.openRoom(textName.text)
-                else
-                    dig.open()
-            }
+            onClicked: openNewRoom()
         }
     }
-
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Enter) {
+            openNewRoom();
+            event.accepted = true;
+        }
+    }
 }

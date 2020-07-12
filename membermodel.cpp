@@ -6,6 +6,9 @@
 
 MemberModel::MemberModel(QObject *parent) : QAbstractListModel(parent)
 {
+    for (int i = 0; i < 5; ++i) {
+        m_list << new CustomSocket(QString("Test %1").arg(i), new QTcpSocket(this));
+    }
 }
 
 int MemberModel::rowCount(const QModelIndex &parent) const

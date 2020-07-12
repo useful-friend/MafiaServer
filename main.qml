@@ -1,6 +1,5 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
-import QtQuick.VirtualKeyboard 2.4
 import QtQuick.Controls.Material 2.0
 import QtQuick.Controls 2.3
 
@@ -10,7 +9,7 @@ Window {
     width: 600
     height: 600
 //    color: "#4c4e50"
-    title: qsTr("Hello World")
+    title: qsTr("Mafia Server")
 
     Material.theme: Material.Dark
     Material.accent: Material.DeepOrange
@@ -19,7 +18,7 @@ Window {
         target: ServerHandler
         onServerInitialized: {
 //            busy.visible = false
-            stack.push("qrc:/MemberSelection.qml", {}, StackView.Immediate)
+            stack.push("qrc:/MemberSelection.qml", {"ip": ipAddress}, StackView.Immediate)
         }
     }
 
@@ -51,32 +50,4 @@ Window {
 //        anchors.centerIn: parent
 //        id: busy
 //    }
-    InputPanel {
-        id: inputPanel
-        z: 99
-        x: 0
-        y: window.height
-        width: window.width
-
-        states: State {
-            name: "visible"
-            when: inputPanel.active
-            PropertyChanges {
-                target: inputPanel
-                y: window.height - inputPanel.height
-            }
-        }
-        transitions: Transition {
-            from: ""
-            to: "visible"
-            reversible: true
-            ParallelAnimation {
-                NumberAnimation {
-                    properties: "y"
-                    duration: 250
-                    easing.type: Easing.InOutQuad
-                }
-            }
-        }
-    }
 }
