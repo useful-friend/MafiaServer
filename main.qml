@@ -2,17 +2,26 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls.Material 2.0
 import QtQuick.Controls 2.3
+import QtQuick.Layouts 1.0
 
 Window {
     id: window
     visible: true
     width: 600
     height: 600
-//    color: "#4c4e50"
+    color: Material.theme == Material.Dark ? "#4c4e50" : "#eeeeee"
     title: qsTr("Mafia Server")
-
     Material.theme: Material.Dark
-    Material.accent: Material.DeepOrange
+    Material.accent: Material.LightBlue
+
+//    MainPage {
+//                id: mainPage
+//                anchors.fill: parent
+//                onOpenRoom: {
+//                    ServerHandler.startServer(roomName)
+//    //                busy.visible = true
+//                }
+//            }
 
     Connections {
         target: ServerHandler
@@ -22,17 +31,39 @@ Window {
         }
     }
 
+    Connections {
+        target: modeSelection
+        onSelected: {
+            console.log(type)
+            if (type === 0) {
+                stack.push("qrc:/MainPage.qml", {}, StackView.Immediate)
+            } else if (type == 1) {
+                stack.push("qrc:/ClientPage.qml", {}, StackView.Immediate)
+            } else
+                console.log("should not end up here")
+        }
+    }
+    Rectangle {
+        id: header
+        height: 50
+        anchors.right: parent.right
+        anchors.left: parent.left
+        color: "darkgrey"
+        Button {
+            id: backButton
+            text: "Back"
+            visible: stack.depth > 1
+            onClicked: stack.pop()
+        }
+    }
+
     StackView {
         id: stack
-        anchors.fill: parent
-        initialItem: MainPage {
-            id: mainPage
-            anchors.fill: parent
-            onOpenRoom: {
-                ServerHandler.startServer(roomName)
-//                busy.visible = true
-            }
-        }
+        anchors.top: header.bottom
+        anchors.right: parent.right
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        initialItem: ModeSelectionPage {id: modeSelection}
     }
     Drawer {
         id: drawer

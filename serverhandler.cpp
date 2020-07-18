@@ -12,6 +12,16 @@ MemberModel *ServerHandler::model() const
     return m_model;
 }
 
+void ServerHandler::start(ServerHandler::Type type)
+{
+    qDebug() << "selected type is:" << type;
+}
+
+void ServerHandler::search()
+{
+    qDebug() << "searching for server...";
+}
+
 ServerHandler::ServerHandler(QObject *parent) : QObject(parent)
 {
     m_model = new MemberModel(this);
@@ -35,7 +45,7 @@ void ServerHandler::startServer(const QString &roomName)
         if (ipAddressesList.at(i) != QHostAddress::LocalHost &&
                 ipAddressesList.at(i).toIPv4Address()) {
             ipAddress = ipAddressesList.at(i).toString();
-            break;
+            qDebug() << "gathered IP address" << ipAddress;
         }
     }
     // if we did not find one, use IPv4 localhost

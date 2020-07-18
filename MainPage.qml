@@ -13,7 +13,6 @@ Item {
         else
             dig.open()
     }
-
     Rectangle {
         anchors.centerIn: parent
         width: 200
@@ -54,7 +53,7 @@ Item {
             text: "start server"
             Material.foreground: Material.DeepOrange
             Material.background: Material.Grey
-            onClicked: openNewRoom()
+            onClicked: ServerHandler.startServer(textName.text)
         }
     }
     Keys.onPressed: {

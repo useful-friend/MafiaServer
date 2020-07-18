@@ -8,19 +8,27 @@ Rectangle {
     id: root
     anchors.fill: parent
     color: "grey"
-    Column {
-        anchors.horizontalCenter: parent.horizontalCenter
+    Item {
+        anchors.fill: parent
         Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 20
             id: ipText
             text: qsTr("The server is running on: ") + ip
         }
         ListView {
+            anchors.horizontalCenter: parent.horizontalCenter
             id: view
             height: contentHeight
+            width: parent.width
+            anchors.top: ipText.bottom
             model: ServerHandler.model()
             delegate: MemberDelegate {}
+            spacing: 10
         }
         Button {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottomMargin: 20
             id: btn
             anchors.top: view.bottom
             text: qsTr("Start")

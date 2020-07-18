@@ -6,5 +6,7 @@
         <file>Settings.qml</file>
         <file>MemberSelection.qml</file>
         <file>MemberDelegate.qml</file>
+        <file>ModeSelectionPage.qml</file>
+        <file>ClientPage.qml</file>
     </qresource>
 </RCC>

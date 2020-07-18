@@ -13,6 +13,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     qmlRegisterUncreatableType<MemberModel>("MemberModel", 1, 0, "MemberModel", "Object is not createable");
+//    qmlRegisterType<ServerHandler>("ServerHandler", 1, 0, "ServerHandler");
+    qRegisterMetaType<ServerHandler::Type>("Type");
 
     QGuiApplication app(argc, argv);
     ServerHandler serverHandler;

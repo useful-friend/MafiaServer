@@ -52,6 +52,15 @@ void MemberModel::add(QTcpSocket *socket, const QString &name)
     endInsertRows();
 }
 
+void MemberModel::remove(int index)
+{
+    if (index < 0 || index >= m_list.size())
+        return;
+    beginRemoveRows(QModelIndex(), index, index);
+    delete m_list.takeAt(index);
+    endRemoveRows();
+}
+
 CustomSocket::CustomSocket(const QString &name, QTcpSocket *socket) : m_name(name), m_socket(socket)
 {
 

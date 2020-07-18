@@ -39,6 +39,7 @@ public:
     Q_ENUM(Role)
     explicit MemberModel(QObject *parent = nullptr);
     void add(QTcpSocket *socket, const QString &name);
+    Q_INVOKABLE void remove(int index);
 
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
